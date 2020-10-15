@@ -15,6 +15,7 @@ for cnt in cnts:
     if cv2.contourArea(cnt):
         xcnts.append(cnt)
 cv2.drawContours(image, cnts, -1, (0, 255, 0), 2)
+cv2.drawContours(image, cnts, -1, (255, 0, 0), cv2.FILLED)
 print(len(xcnts))
 cv2.imshow("Circles", image)
 cv2.waitKey(0)
