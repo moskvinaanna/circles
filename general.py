@@ -3,8 +3,7 @@ import numpy as np
 image = cv2.imread("./coins.jpg")
 height = image.shape[0]
 width = image.shape[1]
-kernel = np.ones((20, 20), np.uint8)
-kernel2 = np.ones((5, 5), np.uint8)
+kernel = np.ones((5, 5), np.uint8)
 image = image[5: height - 5, 5: width - 5]
 
 # morphology operation
@@ -13,9 +12,10 @@ erosionimg = cv2.erode(img2, kernel, iterations=1)
 openimg = cv2.morphologyEx(img2, cv2.MORPH_OPEN, kernel)
 rezimg = openimg - erosionimg
 grayImage = cv2.cvtColor(rezimg, cv2.COLOR_BGR2GRAY)
-closeimg = cv2.morphologyEx(grayImage, cv2.MORPH_CLOSE, kernel2)
-(thresh, blackAndWhiteImage) = cv2.threshold(grayImage, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-thresh_inverse = cv2.bitwise_not(blackAndWhiteImage)
+closeimg = cv2.morphologyEx(grayImage, cv2.MORPH_CLOSE, kernel, iterations=11)
+(thresh, blackAndWhiteImage) = cv2.threshold(closeimg, 1, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+thresh_inverse2 = cv2.bitwise_not(blackAndWhiteImage)
+thresh_inverse = cv2.bitwise_not(thresh_inverse2)
 cnts2 = cv2.findContours(thresh_inverse, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)[-2]
 
 sum = 0  # the total perimeter
@@ -35,9 +35,10 @@ for cnt in cnts2:
     else:
         ycnts.append(cnt)
 
-cv2.drawContours(rezimg, xcnts, -1, (255, 0, 0), 2)
-cv2.drawContours(rezimg, ycnts, -1, (0, 0, 255), 2)
-cv2.imshow("Circles", rezimg)
+cv2.drawContours(image, xcnts, -1, (255, 0, 0), 2)
+cv2.drawContours(image, ycnts, -1, (0, 0, 255), 2)
+
+cv2.imshow("coins", image)
 print(avg)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
