@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-image = cv2.imread("./coins.jpg")
+image = cv2.imread("./coins2.jpg")
 height = image.shape[0]
 width = image.shape[1]
 kernel = np.ones((5, 5), np.uint8)
